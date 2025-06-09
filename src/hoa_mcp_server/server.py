@@ -1,4 +1,18 @@
 #%%
+from fastmcp import FastMCP
+
+mcp = FastMCP('HOA-mcp-server')
+
+@mcp.tool
+def retrieve_context(prompt: str) -> str:
+    print('tool called')
+    r_list = retrieve(prompt)
+    r_str = ''
+    for r in r_list:
+        r_str += r[0]
+    return r_str
+    
+#%%
 import ollama
 import pickle
 
@@ -25,4 +39,10 @@ def retrieve(query, top_n=3):
     similarities.sort(key=lambda x: x[1], reverse=True)
     # finally, return the top N most relevant chunks
     return similarities[:top_n]
-# %%
+
+#%%
+def main():
+    mcp.run(transport='streamable-http')
+
+if __name__ == "__main__":
+    main()

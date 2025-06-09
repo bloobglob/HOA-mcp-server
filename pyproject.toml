@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hoa-mcp-server"
+version = "0.1.0"
+description = "MCP server for HOA document retrieval and context search"
+authors = [
+    {name = "Lucas Han", email = "lucas.joel.han@gmail.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.9.3",
+    "fastmcp>=2.7.1",
+    "ollama>=0.5.1"
+]
+
+[project.scripts]
+hoa-mcp-server = "hoa_mcp_server.server:main"
+
+[project.urls]
+Homepage = "https://github.com/bloobglob/HOA-mcp-server"
+Repository = "https://github.com/bloobglob/HOA-mcp-server"
+Issues = "https://github.com/bloobglob/HOA-mcp-server/issues"
