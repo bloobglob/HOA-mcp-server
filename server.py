@@ -1,7 +1,9 @@
-from fastmcp import FastMCP
-import retrieve
+from fastmcp import FastMCP, Client
+import tools.retrieve as retrieve
+import tools.google_search as gs
+import tools.vectorize as vectorize
 
-mcp = FastMCP('HOA-mcp-server', json_response=True)
+mcp = FastMCP('HOA-mcp-server', json_response=True, stateless_http=True)
 
 @mcp.tool
 def retrieve_context(prompt: str) -> str:
@@ -13,8 +15,19 @@ def retrieve_context(prompt: str) -> str:
         r_str += r[0]
     return r_str
 
+@mcp.tool
+async def google_search(query: str) -> str:
+    """Google searches the prompt"""
+    return await gs.async_google_search(query)
+
+@mcp.tool
+def update_context():
+    """Update HOA document context"""
+    vectorize.vectorize()
+    return f"The HOA documents context have been updated."
+
 def main():
-    mcp.run(transport='sse', host='127.0.0.1', port=8000)
+    mcp.run(transport='streamable-http', host='0.0.0.0', port=8000)
 
 if __name__ == "__main__":
     main()

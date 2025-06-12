@@ -1,2 +1,4 @@
 __pycache__/*
-hoa-env/*
+*/__pycache__/*
+*-env/*
+debug_*

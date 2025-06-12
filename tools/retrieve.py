@@ -1,12 +1,8 @@
-#%%
 import ollama
 import pickle
 
 EMBEDDING_MODEL = 'nomic-embed-text'
 LANGUAGE_MODEL = 'hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF'
-
-with open('vector_db.pkl', 'rb') as f:
-    VECTOR_DB = pickle.load(f)
 
 def cosine_similarity(a, b):
     dot_product = sum([x * y for x, y in zip(a, b)])
@@ -15,6 +11,9 @@ def cosine_similarity(a, b):
     return dot_product / (norm_a * norm_b)
 
 def retrieve(query, top_n=3):
+    with open('vector_db.pkl', 'rb') as f:
+        VECTOR_DB = pickle.load(f)
+        
     query_embedding = ollama.embed(model=EMBEDDING_MODEL, input=query)['embeddings'][0]
     # temporary list to store (chunk, similarity) pairs
     similarities = []
@@ -25,4 +24,3 @@ def retrieve(query, top_n=3):
     similarities.sort(key=lambda x: x[1], reverse=True)
     # finally, return the top N most relevant chunks
     return similarities[:top_n]
-# %%
